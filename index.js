@@ -4,6 +4,7 @@ let lastkey = "";
 let animationID;
 let fruits = [];
 let frames = 0;
+let speedfruits = [];
 
 const player = new Player({
   position: {
@@ -351,6 +352,41 @@ function createFruits() {
   });
 }
 
+// Creates fruit that increase the speed of player at random location after every 8000 frames are passed
+function createSpeedFruits() {
+  if (frames % 2000 === 0) {
+    // Creates fruit every 8000 frames is passed
+    speedfruits.push(new SpeedFruit(dots, 1236, 4, 64, 98));
+
+    // Removes the fruit after 8 seconds
+    setTimeout(() => {
+      speedfruits.splice(0, 1);
+    }, 10000);
+  }
+
+  // Checks if the player has collided with the fruit and increase speed
+
+  speedfruits.forEach((speedfruit) => {
+    speedfruit.draw();
+    if (
+      circleCollision({
+        circle1: { ...speedfruit },
+        circle2: { ...player },
+      })
+    ) {
+      speedfruits.splice(0, 1);
+      player.speed = 3;
+      console.log(player.speed);
+      setTimeout(() => {
+        player.speed = 2;
+        console.log(player.speed);
+      }, 8000);
+      // score += 100;
+      // scores.innerHTML = score;
+    }
+  });
+}
+
 function play() {
   // Creates the animation loop
   animationID = requestAnimationFrame(play);
@@ -378,6 +414,9 @@ function play() {
 
   // Creates fruits every 2000 frames is passed
   createFruits();
+
+  //create speed fruits every 8000 frames is passed
+  createSpeedFruits();
 
   // Updates player position
   player.update();
