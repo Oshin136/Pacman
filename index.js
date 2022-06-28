@@ -2,6 +2,8 @@ let score = 0;
 let ghosts = [];
 let lastkey = "";
 let animationID;
+let fruits = [];
+let frames = 0;
 
 const player = new Player({
   position: {
@@ -320,6 +322,35 @@ function handleGhost() {
   }
 }
 
+// Creates fruit at random location after every 2000 frames are passed
+function createFruits() {
+  if (frames % 2000 === 0) {
+    // Creates fruit every 2000 frames is passed
+    fruits.push(new Fruit(dots, 1324, 1215, 90, 100));
+
+    // Removes the fruit after 8 seconds
+    setTimeout(() => {
+      fruits.splice(0, 1);
+    }, 8000);
+  }
+
+  // Checks if the player has collided with the fruit and adds 100 points
+  // to the score if the player has collided with the fruit
+  fruits.forEach((fruit) => {
+    fruit.draw();
+    if (
+      circleCollision({
+        circle1: { ...fruit },
+        circle2: { ...player },
+      })
+    ) {
+      fruits.splice(0, 1);
+      score += 100;
+      scores.innerHTML = score;
+    }
+  });
+}
+
 function play() {
   // Creates the animation loop
   animationID = requestAnimationFrame(play);
@@ -345,8 +376,14 @@ function play() {
   // Handles all the ghost movement
   handleGhost();
 
+  // Creates fruits every 2000 frames is passed
+  createFruits();
+
   // Updates player position
   player.update();
+
+  // Increases frames by 1
+  frames++;
 }
 
 play();
