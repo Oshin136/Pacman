@@ -1,36 +1,21 @@
-const canvas = document.querySelector("#canvas");
-const ctx = canvas.getContext("2d");
-const scores = document.querySelector(".score");
-canvas.width = 700;
-canvas.height = 700;
-const sprite = new Image();
-sprite.src = "assets/pc.png";
-
 let score = 0;
-const dots = [];
-const powerups = [];
-const boundaries = [];
+let ghosts = [];
 let lastkey = "";
 let animationID;
 
-const player = new Player(
-  {
-    position: {
-      x: mapBoundary.width + mapBoundary.width / 2,
-      y: mapBoundary.height + mapBoundary.height / 2,
-    },
-    velocity: {
-      x: 0,
-      y: 0,
-    },
-  }
-  // 1024,
-  // 408,
-  // 96,
-  // 104
-);
+const player = new Player({
+  position: {
+    x: mapBoundary.width + mapBoundary.width / 2,
+    y: mapBoundary.height + mapBoundary.height / 2,
+  },
+  velocity: {
+    x: 0,
+    y: 0,
+  },
+  speed: 2,
+});
 
-const ghosts = [
+ghosts = [
   new Ghost({
     position: {
       x: mapBoundary.width * 8 + mapBoundary.width / 2,
@@ -67,91 +52,42 @@ const ghosts = [
   }),
 ];
 
-const keys = {
-  a: {
-    ispressed: false,
-  },
-  s: {
-    ispressed: false,
-  },
-  w: {
-    ispressed: false,
-  },
-  d: {
-    ispressed: false,
-  },
-};
-
-function play() {
-  animationID = requestAnimationFrame(play);
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
+function handlePlayerControls() {
+  // Handle Controls for player1
   if (keys.a.ispressed && lastkey === "a") {
-    for (let i = 0; i < boundaries.length; i++) {
-      const boundary = boundaries[i];
-      if (
-        collisionDetection({
-          circle: { ...player, velocity: { x: -2, y: 0 } },
-          rectangle: boundary,
-        })
-      ) {
-        player.velocity.x = 0;
-        break;
-      } else {
-        player.velocity.x = -2;
-      }
-    }
+    player.handleLeftMovement();
   } else if (keys.d.ispressed && lastkey === "d") {
-    for (let i = 0; i < boundaries.length; i++) {
-      const boundary = boundaries[i];
-      if (
-        collisionDetection({
-          circle: { ...player, velocity: { x: 2, y: 0 } },
-          rectangle: boundary,
-        })
-      ) {
-        player.velocity.x = 0;
-        break;
-      } else {
-        player.velocity.x = 2;
-      }
-    }
+    player.handleRightMovement();
   } else if (keys.w.ispressed && lastkey === "w") {
-    for (let i = 0; i < boundaries.length; i++) {
-      const boundary = boundaries[i];
-      if (
-        collisionDetection({
-          circle: { ...player, velocity: { x: 0, y: -2 } },
-          rectangle: boundary,
-        })
-      ) {
-        player.velocity.y = 0;
-        break;
-      } else {
-        player.velocity.y = -2;
-      }
-    }
+    player.handleTopMovement();
   } else if (keys.s.ispressed && lastkey === "s") {
-    for (let i = 0; i < boundaries.length; i++) {
-      const boundary = boundaries[i];
-      if (
-        collisionDetection({
-          circle: { ...player, velocity: { x: 0, y: 2 } },
-          rectangle: boundary,
-        })
-      ) {
-        player.velocity.y = 0;
-        break;
-      } else {
-        player.velocity.y = 2;
-      }
-    }
+    player.handleBottomMovement();
   }
+}
 
+function playerBoundaryCollisionCheck() {
+  boundaries.forEach((boundary) => {
+    boundary.draw();
+
+    if (
+      collisionDetection({
+        circle: player,
+        rectangle: boundary,
+      })
+    ) {
+      player.velocity.x = 0;
+      player.velocity.y = 0;
+    }
+  });
+}
+
+function checkWin() {
   if (dots.length === 0) {
     console.log("you win");
   }
+}
 
+function updateScore() {
   for (let i = dots.length - 1; i >= 0; i--) {
     const dot = dots[i];
     dot.draw();
@@ -164,13 +100,15 @@ function play() {
       dots.splice(i, 1);
       score += 10;
       scores.innerHTML = score;
-      console.log(score);
     }
   }
+}
 
+function createPowerUps() {
   for (let i = powerups.length - 1; i >= 0; i--) {
     const powerup = powerups[i];
     powerup.draw();
+
     if (
       circleCollision({
         circle1: { ...powerup },
@@ -179,18 +117,27 @@ function play() {
     ) {
       powerups.splice(i, 1);
       ghosts.forEach((ghost) => {
+        let prevX;
+        let prevY;
         ghost.scared = true;
+        prevX = ghost.spriteX;
+        prevY = ghost.spriteY;
+        ghost.spriteX = 1138;
+        ghost.spriteY = 1433;
 
         setTimeout(() => {
           ghost.scared = false;
-        }, 5000);
+          ghost.spriteX = prevX;
+          ghost.spriteY = prevY;
+        }, 10000);
       });
 
       score += 10;
-      console.log(score);
     }
   }
+}
 
+function handleGhost() {
   for (let i = ghosts.length - 1; i >= 0; i--) {
     const ghost = ghosts[i];
     ghost.update();
@@ -341,50 +288,35 @@ function play() {
   }
 }
 
+function play() {
+  // Creates the animation loop
+  animationID = requestAnimationFrame(play);
+
+  // Refreshes the screen
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Handles all the player controls
+  handlePlayerControls();
+
+  //checks if player collides with the map boundary
+  playerBoundaryCollisionCheck();
+
+  // Checks if player has won the game (if every dots in the game are eaten)
+  checkWin();
+
+  // Updates the player score
+  updateScore();
+
+  // Creates power-ups dots
+  createPowerUps();
+
+  // Handles all the ghost movement
+  handleGhost();
+
+  // Updates player position
+  player.update();
+}
+
 play();
 
-addEventListener("keydown", ({ key }) => {
-  switch (key) {
-    case "a":
-      keys.a.ispressed = true;
-      player.rotation = Math.PI;
-      lastkey = "a";
-      break;
-
-    case "d":
-      keys.d.ispressed = true;
-      player.rotation = 0;
-      lastkey = "d";
-      break;
-
-    case "w":
-      keys.w.ispressed = true;
-      player.rotation = Math.PI * 1.5;
-      lastkey = "w";
-      break;
-
-    case "s":
-      keys.s.ispressed = true;
-      player.rotation = Math.PI / 2;
-      lastkey = "s";
-  }
-});
-
-addEventListener("keyup", ({ key }) => {
-  switch (key) {
-    case "a":
-      keys.a.ispressed = false;
-      break;
-
-    case "d":
-      keys.d.ispressed = false;
-      break;
-
-    case "w":
-      keys.w.ispressed = false;
-      break;
-
-    case "s":
-      keys.s.ispressed = false;
-  }
-});
+addListeners();
