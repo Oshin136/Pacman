@@ -18,37 +18,32 @@ const player = new Player({
 ghosts = [
   new Ghost({
     position: {
-      x: mapBoundary.width * 8 + mapBoundary.width / 2,
-      y: mapBoundary.height + mapBoundary.height / 2,
+      x: mapBoundary.width * 10 + mapBoundary.width / 2,
+      y: mapBoundary.height * 9 + mapBoundary.height / 2,
     },
     velocity: {
       x: Ghost.speed,
       y: 0,
     },
+    spriteX: 835,
+    spriteY: 524,
+    width: 58,
+    height: 66,
   }),
 
   new Ghost({
     position: {
-      x: mapBoundary.width * 12 + mapBoundary.width / 2,
-      y: mapBoundary.height + mapBoundary.height / 2,
+      x: mapBoundary.width * 10 + mapBoundary.width / 2,
+      y: mapBoundary.height * 9 + mapBoundary.height / 2,
     },
     velocity: {
       x: Ghost.speed,
       y: 0,
     },
-    color: "pink",
-  }),
-
-  new Ghost({
-    position: {
-      x: mapBoundary.width * 12 + mapBoundary.width / 2,
-      y: mapBoundary.height + mapBoundary.height / 2,
-    },
-    velocity: {
-      x: Ghost.speed,
-      y: 0,
-    },
-    color: "cyan",
+    spriteX: 936,
+    spriteY: 524,
+    width: 58,
+    height: 66,
   }),
 ];
 
@@ -141,35 +136,74 @@ function handleGhost() {
   for (let i = ghosts.length - 1; i >= 0; i--) {
     const ghost = ghosts[i];
     ghost.update();
+    // playerGhostCollisionCheck({ ghost });
+
+    //checks if there is collision between ghost ans player
     if (
       circleCollision({
         circle1: { ...ghost },
         circle2: { ...player },
       })
+      // ||
+      // circleCollision({
+      //   circle1: { ...ghost },
+      //   circle2: { ...player2 },
+      // })
     ) {
+      // let previousX = ghost.spriteX;
+      // let previousY = ghost.spriteY;
+      // let prevwidth = ghost.width;
+      // let prevheight = ghost.height;
       if (ghost.scared) {
+        console.log("testing");
+        // let previousX = ghost.spriteX;
+        // let previousY = ghost.spriteY;
+        // let prevwidth = ghost.width;
+        // let prevheight = ghost.height;
+        setTimeout(() => {
+          // let previousX = ghost.spriteX;
+          // let previousY = ghost.spriteY;
+          // let prevwidth = ghost.width;
+          // let prevheight = ghost.height;
+
+          ghosts.push(
+            new Ghost({
+              position: {
+                x: mapBoundary.width * 10 + mapBoundary.width / 2,
+                y: mapBoundary.height * 9 + mapBoundary.height / 2,
+              },
+              velocity: {
+                x: Ghost.speed,
+                y: 0,
+              },
+              // spriteX: previousX,
+              // spriteY: previousY,
+              // width: prevwidth,
+              // height: prevheight,
+
+              spriteX: 835,
+              spriteY: 524,
+              width: 58,
+              height: 66,
+            })
+          );
+          console.log(ghosts);
+        }, 5000);
         ghosts.splice(i, 1);
       } else {
-        cancelAnimationFrame(animationID);
+        lives--;
+        console.log(lives);
+        if (lives === 0) {
+          console.log("hello");
+          cancelAnimationFrame(animationID);
+        }
+        // console.log("hello");
+        // cancelAnimationFrame(animationID);
+        // gameOver.style.display = block;
       }
     }
 
-    boundaries.forEach((boundary) => {
-      boundary.draw();
-
-      if (
-        collisionDetection({
-          circle: player,
-          rectangle: boundary,
-        })
-      ) {
-        player.velocity.x = 0;
-        player.velocity.y = 0;
-      }
-    });
-
-    player.update();
-
+    //collision check for the rqandom movement of ghost
     const collisions = [];
     boundaries.forEach((boundary) => {
       if (
@@ -237,12 +271,10 @@ function handleGhost() {
         collisions.push("up");
       }
     });
-    // console.log(collisions);
 
     if (collisions.length > ghost.ghostPrevCollisions.length) {
       ghost.ghostPrevCollisions = collisions;
     }
-
     if (
       JSON.stringify(ghost.ghostPrevCollisions) !== JSON.stringify(collisions)
     ) {
