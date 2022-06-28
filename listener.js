@@ -1,4 +1,13 @@
+// play();
+
 function addListeners() {
+  singlePlayerButton.addEventListener("click", () => {
+    card.style.display = "none";
+    scorediv.style.display = "inline";
+    livesdiv.style.display = "flex";
+    play();
+  });
+
   addEventListener("keydown", ({ key }) => {
     switch (key) {
       case "a":
@@ -23,6 +32,31 @@ function addListeners() {
         keys.s.ispressed = true;
         player.rotation = Math.PI / 2;
         lastkey = "s";
+        break;
+
+      case "ArrowLeft":
+        keys.ArrowLeft.ispressed = true;
+        player2.rotation = Math.PI;
+        lastkey = "ArrowLeft";
+        break;
+
+      case "ArrowRight":
+        keys.ArrowRight.ispressed = true;
+        player2.rotation = 0;
+        lastkey = "ArrowRight";
+        break;
+
+      case "ArrowUp":
+        keys.ArrowUp.ispressed = true;
+        player2.rotation = Math.PI * 1.5;
+        lastkey = "ArrowUp";
+        break;
+
+      case "ArrowDown":
+        keys.ArrowDown.ispressed = true;
+        player2.rotation = Math.PI / 2;
+        lastkey = "ArrowDown";
+        break;
     }
   });
 
@@ -42,6 +76,23 @@ function addListeners() {
 
       case "s":
         keys.s.ispressed = false;
+        break;
+
+      case "ArrowLeft":
+        keys.ArrowLeft.ispressed = false;
+        break;
+
+      case "ArrowRight":
+        keys.ArrowRight.ispressed = false;
+        break;
+
+      case "ArrowUp":
+        keys.ArrowUp.ispressed = false;
+        break;
+
+      case "ArrowDown":
+        keys.ArrowDown.ispressed = false;
+        break;
     }
   });
 }

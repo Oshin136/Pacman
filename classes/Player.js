@@ -32,7 +32,6 @@ class Player {
    * Checks collision with boundary and stops the player if collided
    *
    */
-
   handleLeftMovement() {
     for (let i = 0; i < boundaries.length; i++) {
       const boundary = boundaries[i];

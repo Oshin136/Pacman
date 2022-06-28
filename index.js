@@ -1,15 +1,17 @@
 let score = 0;
-let ghosts = [];
 let lastkey = "";
 let animationID;
 let fruits = [];
-let frames = 0;
 let speedfruits = [];
+let frames = 0;
+let ghosts = [];
+let lives = 3;
+let game_over = false;
 
 const player = new Player({
   position: {
-    x: mapBoundary.width + mapBoundary.width / 2,
-    y: mapBoundary.height + mapBoundary.height / 2,
+    x: mapBoundary.width * 10 + mapBoundary.width / 2,
+    y: mapBoundary.height * 13 + mapBoundary.height / 2,
   },
   velocity: {
     x: 0,
@@ -17,6 +19,18 @@ const player = new Player({
   },
   speed: 2,
 });
+
+// const player2 = new Player({
+//   position: {
+//     x: mapBoundary.width * 2 + mapBoundary.width / 2,
+//     y: mapBoundary.height + mapBoundary.height / 2,
+//   },
+//   velocity: {
+//     x: 0,
+//     y: 0,
+//   },
+//   speed: 2,
+// });
 
 ghosts = [
   new Ghost({
@@ -61,22 +75,17 @@ function handlePlayerControls() {
   } else if (keys.s.ispressed && lastkey === "s") {
     player.handleBottomMovement();
   }
-}
 
-function playerBoundaryCollisionCheck() {
-  boundaries.forEach((boundary) => {
-    boundary.draw();
-
-    if (
-      collisionDetection({
-        circle: player,
-        rectangle: boundary,
-      })
-    ) {
-      player.velocity.x = 0;
-      player.velocity.y = 0;
-    }
-  });
+  // Handle Controls for player2
+  // if (keys.ArrowLeft.ispressed && lastkey === "ArrowLeft") {
+  //   player2.handleLeftMovement();
+  // } else if (keys.ArrowRight.ispressed && lastkey === "ArrowRight") {
+  //   player2.handleRightMovement();
+  // } else if (keys.ArrowUp.ispressed && lastkey === "ArrowUp") {
+  //   player2.handleTopMovement();
+  // } else if (keys.ArrowDown.ispressed && lastkey === "ArrowDown") {
+  //   player2.handleBottomMovement();
+  // }
 }
 
 function checkWin() {
@@ -95,6 +104,12 @@ function updateScore() {
         circle2: { ...player },
       })
     ) {
+      //   ||
+      //   circleCollision({
+      //     circle1: { ...dot },
+      //     circle2: { ...player2 },
+      //   })
+      // )
       dots.splice(i, 1);
       score += 10;
       scores.innerHTML = score;
@@ -112,6 +127,11 @@ function createPowerUps() {
         circle1: { ...powerup },
         circle2: { ...player },
       })
+      //  ||
+      // circleCollision({
+      //   circle1: { ...powerup },
+      //   circle2: { ...player2 },
+      // })
     ) {
       powerups.splice(i, 1);
       ghosts.forEach((ghost) => {
@@ -134,6 +154,105 @@ function createPowerUps() {
     }
   }
 }
+
+function playerBoundaryCollisionCheck() {
+  boundaries.forEach((boundary) => {
+    boundary.draw();
+
+    if (
+      collisionDetection({
+        circle: player,
+        rectangle: boundary,
+      })
+    ) {
+      player.velocity.x = 0;
+      player.velocity.y = 0;
+    }
+
+    // if (
+    //   collisionDetection({
+    //     circle: player2,
+    //     rectangle: boundary,
+    //   })
+    // ) {
+    //   player2.velocity.x = 0;
+    //   player2.velocity.y = 0;
+    // }
+  });
+}
+
+// function playerGhostCollisionCheck({ ghost }) {
+//   if (
+//     circleCollision({
+//       circle1: { ...ghost },
+//       circle2: { ...player },
+//     })
+//     // ||
+//     // circleCollision({
+//     //   circle1: { ...ghost },
+//     //   circle2: { ...player2 },
+//     // })
+//   ) {
+//     if (ghost.scared) {
+//       console.log("testing");
+//       setTimeout(() => {
+//         ghosts.push(
+//           new Ghost({
+//             position: {
+//               x: mapBoundary.width * 10 + mapBoundary.width / 2,
+//               y: mapBoundary.height * 9 + mapBoundary.height / 2,
+//             },
+//             velocity: {
+//               x: Ghost.speed,
+//               y: 0,
+//             },
+//             spriteX: 835,
+//             spriteY: 524,
+//             width: 58,
+//             height: 66,
+//           })
+//         );
+//         console.log(ghosts);
+//       }, 5000);
+//     }
+//     ghosts.splice(i, 1);
+//     // } else {
+//     //   cancelAnimationFrame(animationID);
+//     // }
+//     // gameOver.style.display = block;
+//     // }
+//   }
+// }
+
+// function ghostIsScared({ ghost }) {
+//   if (ghost.scared) {
+//     // console.log("testing");
+//     setTimeout(() => {
+//       ghosts.push(
+//         new Ghost({
+//           position: {
+//             x: mapBoundary.width * 10 + mapBoundary.width / 2,
+//             y: mapBoundary.height * 9 + mapBoundary.height / 2,
+//           },
+//           velocity: {
+//             x: Ghost.speed,
+//             y: 0,
+//           },
+//           spriteX: ghost.spriteX,
+//           spriteY: ghost.spriteY,
+//           width: ghost.width,
+//           height: ghost.height,
+
+//           // spriteX: 835,
+//           // spriteY: 524,
+//           // width: 58,
+//           // height: 66,
+//         })
+//       );
+//       console.log(ghosts);
+//     }, 5000);
+//   }
+// }
 
 function handleGhost() {
   for (let i = ghosts.length - 1; i >= 0; i--) {
@@ -424,7 +543,5 @@ function play() {
   // Increases frames by 1
   frames++;
 }
-
-play();
 
 addListeners();

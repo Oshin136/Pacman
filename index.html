@@ -9,21 +9,39 @@
   </head>
   <body>
     <canvas id="canvas"></canvas>
-    <div>
+    <div class="scorediv">
       <h1>Score:<span class="score">0</span></h1>
     </div>
+    <div class="livesdiv">
+      <p>Lives :</p>
+      <img class="live_icon" src="./assets/heart.png" alt="live-icon" />
+      <img class="live_icon" src="./assets/heart.png" alt="live-icon" />
+      <img class="live_icon" src="./assets/heart.png" alt="live-icon" />
+    </div>
+    <div class="card">
+      <h2>PACMAN</h2>
+      <div>
+        <h3>Modes</h3>
+        <div class="modes">
+          <button class="btn btn__single">Single Player</button>
+          <button class="btn btn__multiple">Multiplayer</button>
+        </div>
+      </div>
+      <button class="btn btn__howtoplay">How To Play?</button>
+    </div>
+    <div class="gameOver">Game Over!</div>
     <script src="./constant.js"></script>
     <script src="./utils.js"></script>
 
     <script src="./classes/Player.js"></script>
-    <script src="./classes/Dots.js"></script>
-    <script src="./classes/Powerups.js"></script>
     <script src="./classes/Ghost.js"></script>
     <script src="./classes/Fruit.js"></script>
     <script src="./classes/SpeedFruit.js"></script>
     <script src="./classes/MapBoundary.js"></script>
 
+    <script src="./classes/dots.js"></script>
     <script src="./listener.js"></script>
+    <script src="./classes/Powerups.js"></script>
     <script src="./map.js"></script>
 
     <script src="./index.js"></script>
