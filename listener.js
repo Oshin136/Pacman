@@ -1,14 +1,61 @@
-// play();
-
 function addListeners() {
   singlePlayerButton.addEventListener("click", () => {
-    card.style.display = "none";
-    scorediv.style.display = "inline";
-    livesdiv.style.display = "flex";
+    card.classList.add("hide");
+    scorediv.classList.remove("hide");
+    livesdiv.classList.remove("hide");
+    players.push(
+      new Player({
+        position: {
+          x: mapBoundary.width * 10 + mapBoundary.width / 2,
+          y: mapBoundary.height * 13 + mapBoundary.height / 2,
+        },
+        velocity: {
+          x: 0,
+          y: 0,
+        },
+        speed: 2,
+      })
+    );
+
     play();
   });
 
-  addEventListener("keydown", ({ key }) => {
+  multiPlayerButton.addEventListener("click", () => {
+    card.classList.add("hide");
+    scorediv.classList.remove("hide");
+    livesdiv.classList.remove("hide");
+
+    players.push(
+      new Player({
+        position: {
+          x: mapBoundary.width * 10 + mapBoundary.width / 2,
+          y: mapBoundary.height * 13 + mapBoundary.height / 2,
+        },
+        velocity: {
+          x: 0,
+          y: 0,
+        },
+        speed: 2,
+      })
+    );
+
+    players.push(
+      new Player({
+        position: {
+          x: mapBoundary.width * 13 + mapBoundary.width / 2,
+          y: mapBoundary.height * 13 + mapBoundary.height / 2,
+        },
+        velocity: {
+          x: 0,
+          y: 0,
+        },
+        speed: 2,
+      })
+    );
+    play();
+  });
+
+  window.addEventListener("keydown", ({ key }) => {
     switch (key) {
       case "a":
         keys.a.ispressed = true;
@@ -60,7 +107,7 @@ function addListeners() {
     }
   });
 
-  addEventListener("keyup", ({ key }) => {
+  window.addEventListener("keyup", ({ key }) => {
     switch (key) {
       case "a":
         keys.a.ispressed = false;
