@@ -1,3 +1,5 @@
+// play();
+
 function addListeners() {
   singlePlayerButton.addEventListener("click", () => {
     card.classList.add("hide");
@@ -16,7 +18,9 @@ function addListeners() {
         speed: 2,
       })
     );
-
+    // card.style.display = "none";
+    // scorediv.style.display = "inline";
+    // livesdiv.style.display = "flex";
     play();
   });
 
@@ -59,50 +63,58 @@ function addListeners() {
     switch (key) {
       case "a":
         keys.a.ispressed = true;
-        player.rotation = Math.PI;
+        players[0].rotation = Math.PI;
         lastkey = "a";
         break;
 
       case "d":
         keys.d.ispressed = true;
-        player.rotation = 0;
+        players[0].rotation = 0;
         lastkey = "d";
         break;
 
       case "w":
         keys.w.ispressed = true;
-        player.rotation = Math.PI * 1.5;
+        players[0].rotation = Math.PI * 1.5;
         lastkey = "w";
         break;
 
       case "s":
         keys.s.ispressed = true;
-        player.rotation = Math.PI / 2;
+        players[0].rotation = Math.PI / 2;
         lastkey = "s";
         break;
 
       case "ArrowLeft":
-        keys.ArrowLeft.ispressed = true;
-        player2.rotation = Math.PI;
-        lastkey = "ArrowLeft";
+        if (players.length > 1) {
+          keys.ArrowLeft.ispressed = true;
+          players[1].rotation = Math.PI;
+          lastkey = "ArrowLeft";
+        }
         break;
 
       case "ArrowRight":
-        keys.ArrowRight.ispressed = true;
-        player2.rotation = 0;
-        lastkey = "ArrowRight";
+        if (players.length > 1) {
+          keys.ArrowRight.ispressed = true;
+          players[1].rotation = 0;
+          lastkey = "ArrowRight";
+        }
         break;
 
       case "ArrowUp":
-        keys.ArrowUp.ispressed = true;
-        player2.rotation = Math.PI * 1.5;
-        lastkey = "ArrowUp";
+        if (players.length > 1) {
+          keys.ArrowUp.ispressed = true;
+          players[1].rotation = Math.PI * 1.5;
+          lastkey = "ArrowUp";
+        }
         break;
 
       case "ArrowDown":
-        keys.ArrowDown.ispressed = true;
-        player2.rotation = Math.PI / 2;
-        lastkey = "ArrowDown";
+        if (players.length > 1) {
+          keys.ArrowDown.ispressed = true;
+          players[1].rotation = Math.PI / 2;
+          lastkey = "ArrowDown";
+        }
         break;
     }
   });

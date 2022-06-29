@@ -7,6 +7,7 @@ let frames = 0;
 let ghosts = [];
 let lives = 3;
 let game_over = false;
+let deadGhosts = [];
 
 ghosts = [
   new Ghost({
@@ -52,15 +53,17 @@ function handlePlayerControls() {
     players[0].handleBottomMovement();
   }
 
-  //Handle Controls for player2
-  if (keys.ArrowLeft.ispressed && lastkey === "ArrowLeft") {
-    players[1].handleLeftMovement();
-  } else if (keys.ArrowRight.ispressed && lastkey === "ArrowRight") {
-    players[1].handleRightMovement();
-  } else if (keys.ArrowUp.ispressed && lastkey === "ArrowUp") {
-    players[1].handleTopMovement();
-  } else if (keys.ArrowDown.ispressed && lastkey === "ArrowDown") {
-    players[1].handleBottomMovement();
+  // Handle Controls for player2
+  if (players.length > 1) {
+    if (keys.ArrowLeft.ispressed && lastkey === "ArrowLeft") {
+      players[1].handleLeftMovement();
+    } else if (keys.ArrowRight.ispressed && lastkey === "ArrowRight") {
+      players[1].handleRightMovement();
+    } else if (keys.ArrowUp.ispressed && lastkey === "ArrowUp") {
+      players[1].handleTopMovement();
+    } else if (keys.ArrowDown.ispressed && lastkey === "ArrowDown") {
+      players[1].handleBottomMovement();
+    }
   }
 }
 
@@ -103,18 +106,14 @@ function createPowerUps() {
       ) {
         powerups.splice(i, 1);
         ghosts.forEach((ghost) => {
-          let prevX;
-          let prevY;
           ghost.scared = true;
-          prevX = ghost.spriteX;
-          prevY = ghost.spriteY;
           ghost.spriteX = 1138;
           ghost.spriteY = 1433;
 
           setTimeout(() => {
             ghost.scared = false;
-            ghost.spriteX = prevX;
-            ghost.spriteY = prevY;
+            ghost.spriteX = ghost.defaultSpriteX;
+            ghost.spriteY = ghost.defaultSpriteY;
           }, 10000);
         });
 
@@ -142,166 +141,152 @@ function playerBoundaryCollisionCheck() {
   });
 }
 
-function handleGhost() {
-  for (let i = ghosts.length - 1; i >= 0; i--) {
-    const ghost = ghosts[i];
-    ghost.update();
-    // playerGhostCollisionCheck({ ghost });
+function handleGhostPlayerCollision(ghost, player) {
+  if (
+    circleCollision({
+      circle1: { ...ghost },
+      circle2: { ...player },
+    })
+  ) {
+    if (ghost.scared) {
+      // pushes the ghost to the deadGhosts array
+      deadGhosts.push(ghosts.splice(i, 1)[0]);
 
-    //checks if there is collision between ghost ans player
-    if (
-      circleCollision({
-        circle1: { ...ghost },
-        circle2: { ...player },
-      })
-    ) {
-      if (ghost.scared) {
-        setTimeout(() => {
-          ghosts.push(
-            new Ghost({
-              position: {
-                x: mapBoundary.width * 10 + mapBoundary.width / 2,
-                y: mapBoundary.height * 9 + mapBoundary.height / 2,
-              },
-              velocity: {
-                x: Ghost.speed,
-                y: 0,
-              },
-
-              spriteX: 835,
-              spriteY: 524,
-              width: 58,
-              height: 66,
-            })
-          );
-          console.log(ghosts);
-        }, 5000);
-        ghosts.splice(i, 1);
-      } else {
-        lives--;
-        console.log(lives);
-        if (lives === 0) {
-          console.log("hello");
-          cancelAnimationFrame(animationID);
-        }
-      }
-    }
-
-    //collision check for the rqandom movement of ghost
-    const collisions = [];
-    boundaries.forEach((boundary) => {
-      if (
-        !collisions.includes("right") &&
-        collisionDetection({
-          circle: {
-            ...ghost,
+      // Revives the ghost after 5000 seconds
+      setTimeout(() => {
+        ghosts.push(
+          new Ghost({
+            position: {
+              x: mapBoundary.width * 10 + mapBoundary.width / 2,
+              y: mapBoundary.height * 9 + mapBoundary.height / 2,
+            },
             velocity: {
-              x: ghost.speed,
+              x: Ghost.speed,
               y: 0,
             },
-          },
+            spriteX: deadGhosts[0].defaultSpriteX,
+            spriteY: deadGhosts[0].defaultSpriteY,
 
-          rectangle: boundary,
-        })
-      ) {
-        collisions.push("right");
+            width: 58,
+            height: 66,
+          })
+        );
+        // Removes the dead ghost from the array
+        deadGhosts.shift();
+      }, 5000);
+    } else {
+      lives -= 1;
+      lifes[lives].remove();
+
+      // lifes.shift();
+      player.position.x = mapBoundary.width * 10 + mapBoundary.width / 2;
+      player.position.y = mapBoundary.height * 9 + mapBoundary.height / 2;
+      player.velocity = {
+        x: 0,
+        y: 0,
+      };
+      if (lives === 0) {
+        cancelAnimationFrame(animationID);
+        // gameOver.classList.remove("hide");
+        ctx.font = "50px Comic Sans MS";
+        ctx.fillStyle = "white";
+        ctx.textAlign = "center";
+        ctx.fillText("Game Over!", canvas.width / 2.5, canvas.height / 2);
       }
-
-      if (
-        !collisions.includes("left") &&
-        collisionDetection({
-          circle: {
-            ...ghost,
-            velocity: {
-              x: -ghost.speed,
-              y: 0,
-            },
-          },
-          rectangle: boundary,
-        })
-      ) {
-        collisions.push("left");
-      }
-
-      if (
-        !collisions.includes("down") &&
-        collisionDetection({
-          circle: {
-            ...ghost,
-            velocity: {
-              x: 0,
-              y: ghost.speed,
-            },
-          },
-          rectangle: boundary,
-        })
-      ) {
-        collisions.push("down");
-      }
-
-      if (
-        !collisions.includes("up") &&
-        collisionDetection({
-          circle: {
-            ...ghost,
-            velocity: {
-              x: 0,
-              y: -ghost.speed,
-            },
-          },
-          rectangle: boundary,
-        })
-      ) {
-        collisions.push("up");
-      }
-    });
-
-    if (collisions.length > ghost.ghostPrevCollisions.length) {
-      ghost.ghostPrevCollisions = collisions;
-    }
-    if (
-      JSON.stringify(ghost.ghostPrevCollisions) !== JSON.stringify(collisions)
-    ) {
-      if (ghost.velocity.x > 0) {
-        ghost.ghostPrevCollisions.push("right");
-      } else if (ghost.velocity.x < 0) {
-        ghost.ghostPrevCollisions.push("left");
-      } else if (ghost.velocity.y > 0) {
-        ghost.ghostPrevCollisions.push("down");
-      } else if (ghost.velocity.y < 0) {
-        ghost.ghostPrevCollisions.push("up");
-      }
-
-      const path = ghost.ghostPrevCollisions.filter((collision) => {
-        return !collisions.includes(collision);
-      });
-
-      const direction = path[Math.floor(Math.random() * path.length)];
-
-      switch (direction) {
-        case "up":
-          ghost.velocity.y = -ghost.speed;
-          ghost.velocity.x = 0;
-          break;
-
-        case "down":
-          ghost.velocity.y = ghost.speed;
-          ghost.velocity.x = 0;
-          break;
-
-        case "right":
-          ghost.velocity.y = 0;
-          ghost.velocity.x = ghost.speed;
-          break;
-
-        case "left":
-          ghost.velocity.y = 0;
-          ghost.velocity.x = -ghost.speed;
-          break;
-      }
-      ghost.ghostPrevCollisions = [];
     }
   }
+}
+
+function checkGhostBoundaryCollision(ghost, boundaries) {
+  const collisions = [];
+  boundaries.forEach((boundary) => {
+    // If there is no right collision previsouly detected then check for a right collision
+    if (
+      !collisions.includes("right") &&
+      collisionDetection({
+        circle: {
+          ...ghost,
+          velocity: {
+            x: ghost.speed,
+            y: 0,
+          },
+        },
+        rectangle: boundary,
+      })
+    ) {
+      collisions.push("right");
+    }
+
+    // If there is no lef collision previsouly detected then check for a left collision
+    if (
+      !collisions.includes("left") &&
+      collisionDetection({
+        circle: {
+          ...ghost,
+          velocity: {
+            x: -ghost.speed,
+            y: 0,
+          },
+        },
+        rectangle: boundary,
+      })
+    ) {
+      collisions.push("left");
+    }
+
+    // If there is no down collision previsouly detected then check for a down collision
+    if (
+      !collisions.includes("down") &&
+      collisionDetection({
+        circle: {
+          ...ghost,
+          velocity: {
+            x: 0,
+            y: ghost.speed,
+          },
+        },
+        rectangle: boundary,
+      })
+    ) {
+      collisions.push("down");
+    }
+
+    // If there is no upward collision previsouly detected then check for a upward collision
+    if (
+      !collisions.includes("up") &&
+      collisionDetection({
+        circle: {
+          ...ghost,
+          velocity: {
+            x: 0,
+            y: -ghost.speed,
+          },
+        },
+        rectangle: boundary,
+      })
+    ) {
+      collisions.push("up");
+    }
+  });
+  return collisions;
+}
+
+function handleGhost() {
+  ghosts.forEach((ghost) => {
+    ghost.update();
+
+    players.forEach((player) => {
+      //collision check for the rqandom movement of ghost
+      handleGhostPlayerCollision(ghost, player);
+
+      const collisions = checkGhostBoundaryCollision(ghost, boundaries);
+      if (collisions.length > ghost.ghostPrevCollisions.length) {
+        ghost.ghostPrevCollisions = collisions;
+      }
+
+      ghost.switchDirection(collisions);
+    });
+  });
 }
 
 // Creates fruit at random location after every 2000 frames are passed
@@ -338,17 +323,16 @@ function createFruits() {
 // Creates fruit that increase the speed of player at random location after every 8000 frames are passed
 function createSpeedFruits() {
   if (frames % 2000 === 0) {
-    // Creates fruit every 8000 frames is passed
+    // Creates fruit every 2000 frames is passed
     speedfruits.push(new SpeedFruit(dots, 1236, 4, 64, 98));
 
-    // Removes the fruit after 8 seconds
+    // Removes the fruit after 10 seconds
     setTimeout(() => {
       speedfruits.splice(0, 1);
     }, 10000);
   }
 
   // Checks if the player has collided with the fruit and increase speed
-
   players.forEach((player) => {
     speedfruits.forEach((speedfruit) => {
       speedfruit.draw();
@@ -358,13 +342,18 @@ function createSpeedFruits() {
           circle2: { ...player },
         })
       ) {
+        // Removes the fruit from the canvas
         speedfruits.splice(0, 1);
+
+        // Increases the player speed
         player.speed = 3;
-        console.log(player.speed);
+
+        // Resets the player speed after 8 seconds
         setTimeout(() => {
           player.speed = 2;
-          console.log(player.speed);
         }, 8000);
+        // score += 100;
+        // scores.innerHTML = score;
       }
     });
   });

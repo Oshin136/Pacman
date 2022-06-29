@@ -32,14 +32,9 @@ h3 {
   transform: translateY(20%);
 }
 
-.scorediv {
-  display: none;
-}
-
-.livesdiv {
-  display: none;
+.lives {
   text-align: center;
-  margin-left: 60%;
+  margin-left: 28%;
 }
 
 .live_icon {
@@ -47,10 +42,6 @@ h3 {
   height: 20px;
   margin-right: 10px;
 }
-/* 
-.lives {
-  display: none;
-} */
 
 .btn {
   background-color: transparent;
@@ -86,5 +77,8 @@ h3 {
   text-align: center;
   color: white;
   background-color: red;
+}
+
+.hide {
   display: none;
 }
