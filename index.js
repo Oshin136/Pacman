@@ -8,39 +8,74 @@ let ghosts = [];
 let lives = 3;
 let game_over = false;
 let deadGhosts = [];
+let level = 1;
 
-ghosts = [
-  new Ghost({
-    position: {
-      x: mapBoundary.width * 10 + mapBoundary.width / 2,
-      y: mapBoundary.height * 9 + mapBoundary.height / 2,
-    },
-    velocity: {
-      x: Ghost.speed,
-      y: 0,
-    },
-    spriteX: 835,
-    spriteY: 524,
-    width: 58,
-    height: 66,
-  }),
+let players = [];
+let dots = [];
+let powerups = [];
+let boundaries = [];
 
-  new Ghost({
-    position: {
-      x: mapBoundary.width * 10 + mapBoundary.width / 2,
-      y: mapBoundary.height * 9 + mapBoundary.height / 2,
-    },
-    velocity: {
-      x: Ghost.speed,
-      y: 0,
-    },
-    spriteX: 936,
-    spriteY: 524,
-    width: 58,
-    height: 66,
-  }),
-];
+let ghost1 = new Ghost({
+  position: {
+    x: mapBoundary.width * 10 + mapBoundary.width / 2,
+    y: mapBoundary.height * 9 + mapBoundary.height / 2,
+  },
+  velocity: {
+    x: Ghost.speed,
+    y: 0,
+  },
+  spriteX: 835,
+  spriteY: 524,
+  width: 58,
+  height: 66,
+});
 
+let ghost2 = new Ghost({
+  position: {
+    x: mapBoundary.width * 13 + mapBoundary.width / 2,
+    y: mapBoundary.height * 9 + mapBoundary.height / 2,
+  },
+  velocity: {
+    x: Ghost.speed,
+    y: 0,
+  },
+  spriteX: 936,
+  spriteY: 322,
+  width: 58,
+  height: 66,
+});
+
+let ghost3 = new Ghost({
+  position: {
+    x: mapBoundary.width * 8 + mapBoundary.width / 2,
+    y: mapBoundary.height * 9 + mapBoundary.height / 2,
+  },
+  velocity: {
+    x: Ghost.speed,
+    y: 0,
+  },
+  spriteX: 835,
+  spriteY: 1332,
+  width: 58,
+  height: 66,
+});
+
+let ghost4 = new Ghost({
+  position: {
+    x: mapBoundary.width * 6 + mapBoundary.width / 2,
+    y: mapBoundary.height * 9 + mapBoundary.height / 2,
+  },
+  velocity: {
+    x: Ghost.speed,
+    y: 0,
+  },
+  spriteX: 1634,
+  spriteY: 1433,
+  width: 58,
+  height: 66,
+});
+
+ghosts = [ghost1, ghost2];
 function handlePlayerControls() {
   // Handle Controls for player1
   if (keys.a.ispressed && lastkey === "a") {
@@ -67,9 +102,30 @@ function handlePlayerControls() {
   }
 }
 
+function displayLevelCompleted() {
+  ctx.font = "50px Comic Sans MS";
+  ctx.fillStyle = "white";
+  ctx.textAlign = "center";
+  ctx.fillText("Level Completed!", canvas.width / 2.5, canvas.height / 2);
+}
+
+function displayGameOver() {
+  ctx.font = "50px Comic Sans MS";
+  ctx.fillStyle = "white";
+  ctx.textAlign = "center";
+  ctx.fillText("You Win!", canvas.width / 2.5, canvas.height / 2);
+}
+
 function checkWin() {
   if (dots.length === 0) {
-    console.log("you win");
+    if (level !== 4) {
+      displayLevelCompleted();
+      levelButton.classList.remove("hide");
+    } else {
+      displayGameOver();
+    }
+
+    cancelAnimationFrame(animationID);
   }
 }
 
@@ -141,7 +197,7 @@ function playerBoundaryCollisionCheck() {
   });
 }
 
-function handleGhostPlayerCollision(ghost, player) {
+function handleGhostPlayerCollision(ghost, player, i) {
   if (
     circleCollision({
       circle1: { ...ghost },
@@ -272,12 +328,13 @@ function checkGhostBoundaryCollision(ghost, boundaries) {
 }
 
 function handleGhost() {
-  ghosts.forEach((ghost) => {
+  for (let i = 0; i < ghosts.length; i++) {
+    const ghost = ghosts[i];
     ghost.update();
 
     players.forEach((player) => {
       //collision check for the rqandom movement of ghost
-      handleGhostPlayerCollision(ghost, player);
+      handleGhostPlayerCollision(ghost, player, i);
 
       const collisions = checkGhostBoundaryCollision(ghost, boundaries);
       if (collisions.length > ghost.ghostPrevCollisions.length) {
@@ -286,7 +343,7 @@ function handleGhost() {
 
       ghost.switchDirection(collisions);
     });
-  });
+  }
 }
 
 // Creates fruit at random location after every 2000 frames are passed
@@ -388,7 +445,7 @@ function play() {
   createFruits();
 
   //create speed fruits every 8000 frames is passed
-  createSpeedFruits();
+  // createSpeedFruits();
 
   // Updates player position
   players.forEach((player) => {

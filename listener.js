@@ -1,10 +1,10 @@
-// play();
-
 function addListeners() {
   singlePlayerButton.addEventListener("click", () => {
     card.classList.add("hide");
     scorediv.classList.remove("hide");
     livesdiv.classList.remove("hide");
+    leveldiv.classList.remove("hide");
+    levelValue.innerHTML = level;
     players.push(
       new Player({
         position: {
@@ -18,9 +18,9 @@ function addListeners() {
         speed: 2,
       })
     );
-    // card.style.display = "none";
-    // scorediv.style.display = "inline";
-    // livesdiv.style.display = "flex";
+    //Draws the map
+    buildMap();
+
     play();
   });
 
@@ -28,6 +28,8 @@ function addListeners() {
     card.classList.add("hide");
     scorediv.classList.remove("hide");
     livesdiv.classList.remove("hide");
+    leveldiv.classList.remove("hide");
+    levelValue.innerHTML = level;
 
     players.push(
       new Player({
@@ -56,6 +58,36 @@ function addListeners() {
         speed: 2,
       })
     );
+
+    buildMap();
+    play();
+  });
+
+  levelButton.addEventListener("click", () => {
+    levelButton.classList.add("hide");
+    level++;
+    levelValue.innerHTML = level;
+
+    boundaries = [];
+    dots = [];
+    powerups = [];
+
+    if (level == 2) {
+      console.log(Ghost.speed);
+      ghosts.push(ghost3);
+      ghosts.forEach((ghost) => {
+        ghost.speed += 0.7;
+      });
+    } else if (level == 3) {
+      Ghost.speed += 1;
+      console.log(Ghost.speed);
+      ghosts.push(ghost4);
+      ghosts.forEach((ghost) => {
+        ghost.speed += 0.7;
+      });
+    }
+    // Draws the map
+    buildMap();
     play();
   });
 

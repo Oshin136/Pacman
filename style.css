@@ -37,6 +37,10 @@ h3 {
   margin-left: 28%;
 }
 
+.level p {
+  margin-left: 40%;
+}
+
 .live_icon {
   width: 20px;
   height: 20px;
@@ -59,6 +63,11 @@ h3 {
 
 .btn:hover {
   color: blue;
+}
+
+.btn__level {
+  margin-top: 650px;
+  margin-left: 55%;
 }
 
 .card {
