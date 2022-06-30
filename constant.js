@@ -6,16 +6,20 @@ canvas.height = 700;
 
 const scorediv = document.querySelector(".scorediv");
 const scores = document.querySelector(".score");
+const highscore = document.querySelector(".highscore");
 const livesdiv = document.querySelector(".lives");
-const leveldiv = document.querySelector(".level");
-
 const lifes = document.querySelectorAll(".lives img");
+const leveldiv = document.querySelector(".level");
+console.log(lifes);
+// const startButton = document.querySelector(".btn__start");
 const singlePlayerButton = document.querySelector(".btn__single");
 const multiPlayerButton = document.querySelector(".btn__multiple");
+const levelButton = document.querySelector(".btn__level");
+const replayButton = document.querySelector(".btn__replay");
+const levelValue = document.querySelector(".levelValue");
+
 const card = document.querySelector(".card");
 const gameOver = document.querySelector(".gameOver");
-const levelButton = document.querySelector(".btn__level");
-const levelValue = document.querySelector(".levelValue");
 
 const sprite = new Image();
 sprite.src = "assets/pc.png";

@@ -1,16 +1,17 @@
 let score = 0;
+let highScore;
 let lastkey = "";
 let animationID;
 let fruits = [];
 let speedfruits = [];
 let frames = 0;
 let ghosts = [];
+let players = [];
 let lives = 3;
 let game_over = false;
 let deadGhosts = [];
 let level = 1;
 
-let players = [];
 let dots = [];
 let powerups = [];
 let boundaries = [];
@@ -69,13 +70,14 @@ let ghost4 = new Ghost({
     x: Ghost.speed,
     y: 0,
   },
-  spriteX: 1634,
+  spriteX: 1643,
   spriteY: 1433,
   width: 58,
   height: 66,
 });
 
 ghosts = [ghost1, ghost2];
+
 function handlePlayerControls() {
   // Handle Controls for player1
   if (keys.a.ispressed && lastkey === "a") {
@@ -103,26 +105,28 @@ function handlePlayerControls() {
 }
 
 function displayLevelCompleted() {
-  ctx.font = "50px Comic Sans MS";
-  ctx.fillStyle = "white";
+  ctx.font = "50px Big Shoulders Display";
+  ctx.fillStyle = "yellow";
   ctx.textAlign = "center";
   ctx.fillText("Level Completed!", canvas.width / 2.5, canvas.height / 2);
 }
 
 function displayGameOver() {
-  ctx.font = "50px Comic Sans MS";
-  ctx.fillStyle = "white";
+  ctx.font = "50px Big Shoulders Display";
+  ctx.fillStyle = "yellow";
   ctx.textAlign = "center";
   ctx.fillText("You Win!", canvas.width / 2.5, canvas.height / 2);
 }
 
 function checkWin() {
   if (dots.length === 0) {
-    if (level !== 4) {
+    if (level === 4) {
+      levelButton.classList.add("hide");
+      putHighScore();
+      displayGameOver();
+    } else {
       displayLevelCompleted();
       levelButton.classList.remove("hide");
-    } else {
-      displayGameOver();
     }
 
     cancelAnimationFrame(animationID);
@@ -141,7 +145,6 @@ function updateScore() {
         })
       ) {
         dotEatAudio.play();
-
         dots.splice(i, 1);
         score += 10;
         scores.innerHTML = score;
@@ -163,7 +166,6 @@ function createPowerUps() {
         })
       ) {
         powerUpAudio.play();
-
         powerups.splice(i, 1);
         ghosts.forEach((ghost) => {
           ghost.scared = true;
@@ -210,7 +212,6 @@ function handleGhostPlayerCollision(ghost, player, i) {
   ) {
     if (ghost.scared) {
       ghostKillAudio.play();
-
       // pushes the ghost to the deadGhosts array
       deadGhosts.push(ghosts.splice(i, 1)[0]);
 
@@ -233,12 +234,12 @@ function handleGhostPlayerCollision(ghost, player, i) {
             height: 66,
           })
         );
+
         // Removes the dead ghost from the array
         deadGhosts.shift();
       }, 5000);
     } else {
       deathAudio.play();
-
       lives -= 1;
       lifes[lives].remove();
 
@@ -251,9 +252,10 @@ function handleGhostPlayerCollision(ghost, player, i) {
       };
       if (lives === 0) {
         cancelAnimationFrame(animationID);
-        // gameOver.classList.remove("hide");
-        ctx.font = "50px Comic Sans MS";
-        ctx.fillStyle = "white";
+        putHighScore();
+
+        ctx.font = "50px Big Shoulders Display";
+        ctx.fillStyle = "yellow";
         ctx.textAlign = "center";
         ctx.fillText("Game Over!", canvas.width / 2.5, canvas.height / 2);
       }
@@ -338,6 +340,7 @@ function checkGhostBoundaryCollision(ghost, boundaries) {
 function handleGhost() {
   for (let i = 0; i < ghosts.length; i++) {
     const ghost = ghosts[i];
+
     ghost.update();
 
     players.forEach((player) => {
@@ -387,8 +390,8 @@ function createFruits() {
 
 // Creates fruit that increase the speed of player at random location after every 8000 frames are passed
 function createSpeedFruits() {
-  if (frames % 2000 === 0) {
-    // Creates fruit every 2000 frames is passed
+  if (frames % 3000 === 0) {
+    // Creates fruit every 3000 frames is passed
     speedfruits.push(new SpeedFruit(dots, 1236, 4, 64, 98));
 
     // Removes the fruit after 10 seconds
@@ -411,14 +414,17 @@ function createSpeedFruits() {
         speedfruits.splice(0, 1);
 
         // Increases the player speed
-        player.speed = 3;
+        players.forEach((player) => {
+          player.speed += 0.3;
+          console.log(player.speed);
+        });
 
         // Resets the player speed after 8 seconds
         setTimeout(() => {
-          player.speed = 2;
+          players.forEach((player) => {
+            player.speed -= 0.5;
+          });
         }, 8000);
-        // score += 100;
-        // scores.innerHTML = score;
       }
     });
   });
@@ -453,7 +459,7 @@ function play() {
   createFruits();
 
   //create speed fruits every 8000 frames is passed
-  // createSpeedFruits();
+  createSpeedFruits();
 
   // Updates player position
   players.forEach((player) => {
@@ -464,4 +470,30 @@ function play() {
   frames++;
 }
 
-addListeners();
+async function getHighScore() {
+  try {
+    let data = await fetch("http://localhost:3000/highscore");
+    let parsedData = await data.json();
+    console.log("ddfdf" + parsedData);
+    console.log(parsedData);
+    highScore = parsedData.highscore;
+    console.log("djndk", highScore);
+  } catch (err) {
+    highScore = 999;
+  }
+  addListeners();
+}
+
+async function putHighScore() {
+  try {
+    await fetch("http://localhost:3000/highscore", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ score: score }),
+    });
+  } catch (err) {}
+}
+
+getHighScore();

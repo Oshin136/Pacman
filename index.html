@@ -4,13 +4,32 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700&family=Lexend+Deca&family=Outfit:wght@400;700&family=Play&family=Poppins:wght@400;500;600;700;800;900&family=Red+Hat+Display:wght@500;700;900&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="style.css" />
     <title>Pacman</title>
   </head>
   <body>
+    <div class="card">
+      <h1>PACMAN</h1>
+      <div>
+        <h2>Modes</h2>
+        <div class="modes">
+          <button class="btn btn__single">Single Player</button>
+          <button class="btn btn__multiple">Multiplayer</button>
+        </div>
+      </div>
+    </div>
     <canvas id="canvas"></canvas>
     <div class="scorediv hide">
-      <h1>Score:<span class="score">0</span></h1>
+      <h3 class="highscore_heading">
+        Highscore : <span class="highscore"></span>
+      </h3>
+      <h3>Score : <span class="score">0</span></h3>
     </div>
     <div class="lives hide">
       <p>Lives :</p>
@@ -18,25 +37,16 @@
       <img class="live_icon" src="./assets/heart.png" alt="live-icon" />
       <img class="live_icon" src="./assets/heart.png" alt="live-icon" />
     </div>
-    <div class="card">
-      <h2>PACMAN</h2>
-      <!-- <img src="./assets/pacman-title.png" alt="pacman-title" /> -->
-      <div>
-        <h3>Modes</h3>
-        <div class="modes">
-          <button class="btn btn__single">Single Player</button>
-          <button class="btn btn__multiple">Multiplayer</button>
-        </div>
-      </div>
-      <button class="btn btn__howtoplay">How To Play?</button>
-    </div>
+
     <div class="level hide">
-      <p>Level:<span class="levelValue"></span></p>
+      <p>Level : <span class="levelValue"></span></p>
     </div>
     <div>
       <button class="btn btn__level hide">Next Level</button>
     </div>
-    <div class="gameOver hide">Game Over!</div>
+
+    <button class="btn btn__replay hide">Replay</button>
+
     <script src="./constant.js"></script>
     <script src="./utils.js"></script>
 
@@ -45,9 +55,9 @@
     <script src="./classes/Fruit.js"></script>
     <script src="./classes/SpeedFruit.js"></script>
     <script src="./classes/MapBoundary.js"></script>
+    <script src="./classes/Dots.js"></script>
 
     <script src="./map.js"></script>
-    <script src="./classes/Dots.js"></script>
     <script src="./listener.js"></script>
     <script src="./classes/Powerups.js"></script>
 

@@ -1,5 +1,5 @@
 class Ghost {
-  static speed = 2;
+  static speed = 1;
 
   constructor({ position, velocity, spriteX, spriteY, width, height }) {
     this.position = position;
@@ -10,7 +10,7 @@ class Ghost {
     this.height = height;
     this.radius = 13;
     this.ghostPrevCollisions = [];
-    this.speed = 2;
+    this.speed = 1;
     this.scared = false;
 
     this.defaultSpriteX = this.spriteX;

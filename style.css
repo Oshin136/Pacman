@@ -8,22 +8,25 @@ body {
   background-color: black;
   position: relative;
   color: white;
+  font-family: "Big Shoulders Display";
 }
 
 h1 {
-  color: white;
-  margin-left: 40%;
-  padding-top: 40px;
+  text-align: center;
+  margin: 100px auto;
+  font-size: 80px;
+  color: yellow;
 }
 
 h2 {
   text-align: center;
-  margin: 100px auto;
+  margin: 15px auto;
 }
 
 h3 {
-  text-align: center;
-  /* margin: 50px auto; */
+  margin-left: 40%;
+  margin-top: 10px;
+  /* text-align: center; */
 }
 
 #canvas {
@@ -32,9 +35,14 @@ h3 {
   transform: translateY(20%);
 }
 
+.highscore_heading {
+  color: yellow;
+}
+
 .lives {
   text-align: center;
   margin-left: 28%;
+  /* margin-top: -2%; */
 }
 
 .level p {
@@ -50,6 +58,7 @@ h3 {
 .btn {
   background-color: transparent;
   color: white;
+  font-family: "Big Shoulders Display";
   font-size: 20px;
   text-align: center;
   margin-left: 50%;
@@ -62,12 +71,23 @@ h3 {
 }
 
 .btn:hover {
-  color: blue;
+  color: yellow;
+  border: 1px solid yellow;
 }
 
 .btn__level {
   margin-top: 650px;
   margin-left: 55%;
+}
+
+.btn__replay {
+  margin-left: 67%;
+  margin-top: 34%;
+  border: none;
+}
+
+.btn__replay:hover {
+  border: none;
 }
 
 .card {
