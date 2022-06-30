@@ -20,6 +20,12 @@ const levelValue = document.querySelector(".levelValue");
 const sprite = new Image();
 sprite.src = "assets/pc.png";
 
+const startAudio = new Audio("./audio/start.ogg");
+const dotEatAudio = new Audio("./audio/eat1.ogg");
+const powerUpAudio = new Audio("./audio/eat2.ogg");
+const deathAudio = new Audio("./audio/death.mp3");
+const ghostKillAudio = new Audio("./audio/kill.mp3");
+
 const keys = {
   a: {
     ispressed: false,

@@ -140,6 +140,8 @@ function updateScore() {
           circle2: { ...player },
         })
       ) {
+        dotEatAudio.play();
+
         dots.splice(i, 1);
         score += 10;
         scores.innerHTML = score;
@@ -160,6 +162,8 @@ function createPowerUps() {
           circle2: { ...player },
         })
       ) {
+        powerUpAudio.play();
+
         powerups.splice(i, 1);
         ghosts.forEach((ghost) => {
           ghost.scared = true;
@@ -205,6 +209,8 @@ function handleGhostPlayerCollision(ghost, player, i) {
     })
   ) {
     if (ghost.scared) {
+      ghostKillAudio.play();
+
       // pushes the ghost to the deadGhosts array
       deadGhosts.push(ghosts.splice(i, 1)[0]);
 
@@ -231,6 +237,8 @@ function handleGhostPlayerCollision(ghost, player, i) {
         deadGhosts.shift();
       }, 5000);
     } else {
+      deathAudio.play();
+
       lives -= 1;
       lifes[lives].remove();
 
