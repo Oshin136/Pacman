@@ -72,7 +72,6 @@ function addListeners() {
   levelButton.addEventListener("click", () => {
     levelButton.classList.add("hide");
 
-    level++;
     levelValue.innerHTML = level;
 
     boundaries = [];
@@ -80,14 +79,11 @@ function addListeners() {
     powerups = [];
 
     if (level == 2) {
-      console.log(Ghost.speed);
       ghosts.push(ghost3);
       ghosts.forEach((ghost) => {
         ghost.speed += 0.5;
-        console.log(ghost.speed);
       });
     } else if (level == 3) {
-      console.log(Ghost.speed);
       ghosts.push(ghost4);
       ghosts.forEach((ghost) => {
         ghost.speed += 0.5;

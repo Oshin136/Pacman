@@ -10,8 +10,7 @@ const highscore = document.querySelector(".highscore");
 const livesdiv = document.querySelector(".lives");
 const lifes = document.querySelectorAll(".lives img");
 const leveldiv = document.querySelector(".level");
-console.log(lifes);
-// const startButton = document.querySelector(".btn__start");
+
 const singlePlayerButton = document.querySelector(".btn__single");
 const multiPlayerButton = document.querySelector(".btn__multiple");
 const levelButton = document.querySelector(".btn__level");

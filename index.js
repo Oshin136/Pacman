@@ -104,22 +104,9 @@ function handlePlayerControls() {
   }
 }
 
-function displayLevelCompleted() {
-  ctx.font = "50px Big Shoulders Display";
-  ctx.fillStyle = "yellow";
-  ctx.textAlign = "center";
-  ctx.fillText("Level Completed!", canvas.width / 2.5, canvas.height / 2);
-}
-
-function displayGameOver() {
-  ctx.font = "50px Big Shoulders Display";
-  ctx.fillStyle = "yellow";
-  ctx.textAlign = "center";
-  ctx.fillText("You Win!", canvas.width / 2.5, canvas.height / 2);
-}
-
 function checkWin() {
   if (dots.length === 0) {
+    level++;
     if (level === 4) {
       levelButton.classList.add("hide");
       putHighScore();
@@ -472,7 +459,7 @@ function play() {
 
 async function getHighScore() {
   try {
-    let data = await fetch("http://localhost:3000/highscore");
+    let data = await fetch("https://pacman-server.oshin136.repl.co/highscore");
     let parsedData = await data.json();
     console.log("ddfdf" + parsedData);
     console.log(parsedData);
@@ -486,7 +473,7 @@ async function getHighScore() {
 
 async function putHighScore() {
   try {
-    await fetch("http://localhost:3000/highscore", {
+    await fetch("https://pacman-server.oshin136.repl.co/highscore", {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

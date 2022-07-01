@@ -27,3 +27,17 @@ function createImage(src) {
   image.src = src;
   return image;
 }
+
+function displayLevelCompleted() {
+  ctx.font = "50px Big Shoulders Display";
+  ctx.fillStyle = "yellow";
+  ctx.textAlign = "center";
+  ctx.fillText("Level Completed!", canvas.width / 2.5, canvas.height / 2);
+}
+
+function displayGameOver() {
+  ctx.font = "50px Big Shoulders Display";
+  ctx.fillStyle = "yellow";
+  ctx.textAlign = "center";
+  ctx.fillText("You Win!", canvas.width / 2.5, canvas.height / 2);
+}
