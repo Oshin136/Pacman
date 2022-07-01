@@ -21,7 +21,7 @@ const card = document.querySelector(".card");
 const gameOver = document.querySelector(".gameOver");
 
 const sprite = new Image();
-sprite.src = "assets/pc.png";
+sprite.src = "./assets/pc.png";
 
 const startAudio = new Audio("./audio/start.ogg");
 const dotEatAudio = new Audio("./audio/eat1.ogg");

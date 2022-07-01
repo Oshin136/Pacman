@@ -564,7 +564,7 @@ function buildMap() {
                 x: mapBoundary.width * j,
                 y: mapBoundary.height * i,
               },
-              image: createImage("./assets/pipeHorizontal.png"),
+              image: createImage("../assets/pipeHorizontal.png"),
             })
           );
           break;
@@ -575,7 +575,7 @@ function buildMap() {
                 x: mapBoundary.width * j,
                 y: mapBoundary.height * i,
               },
-              image: createImage("./assets/pipeVertical.png"),
+              image: createImage("../assets/pipeVertical.png"),
             })
           );
           break;
@@ -586,7 +586,7 @@ function buildMap() {
                 x: mapBoundary.width * j,
                 y: mapBoundary.height * i,
               },
-              image: createImage("./assets/pipeCorner1.png"),
+              image: createImage("../assets/pipeCorner1.png"),
             })
           );
           break;
@@ -597,7 +597,7 @@ function buildMap() {
                 x: mapBoundary.width * j,
                 y: mapBoundary.height * i,
               },
-              image: createImage("./assets/pipeCorner2.png"),
+              image: createImage("../assets/pipeCorner2.png"),
             })
           );
           break;
@@ -608,7 +608,7 @@ function buildMap() {
                 x: mapBoundary.width * j,
                 y: mapBoundary.height * i,
               },
-              image: createImage("./assets/pipeCorner3.png"),
+              image: createImage("../assets/pipeCorner3.png"),
             })
           );
           break;
@@ -619,7 +619,7 @@ function buildMap() {
                 x: mapBoundary.width * j,
                 y: mapBoundary.height * i,
               },
-              image: createImage("./assets/pipeCorner4.png"),
+              image: createImage("../assets/pipeCorner4.png"),
             })
           );
           break;
@@ -630,7 +630,7 @@ function buildMap() {
                 x: mapBoundary.width * j,
                 y: mapBoundary.height * i,
               },
-              image: createImage("./assets/block.png"),
+              image: createImage("../assets/block.png"),
             })
           );
           break;
@@ -641,7 +641,7 @@ function buildMap() {
                 x: j * mapBoundary.width,
                 y: i * mapBoundary.height,
               },
-              image: createImage("./assets/capLeft.png"),
+              image: createImage("../assets/capLeft.png"),
             })
           );
           break;
@@ -652,7 +652,7 @@ function buildMap() {
                 x: j * mapBoundary.width,
                 y: i * mapBoundary.height,
               },
-              image: createImage("./assets/capRight.png"),
+              image: createImage("../assets/capRight.png"),
             })
           );
           break;
@@ -663,7 +663,7 @@ function buildMap() {
                 x: j * mapBoundary.width,
                 y: i * mapBoundary.height,
               },
-              image: createImage("./assets/capBottom.png"),
+              image: createImage("../assets/capBottom.png"),
             })
           );
           break;
@@ -674,7 +674,7 @@ function buildMap() {
                 x: j * mapBoundary.width,
                 y: i * mapBoundary.height,
               },
-              image: createImage("./assets/capTop.png"),
+              image: createImage("../assets/capTop.png"),
             })
           );
           break;
@@ -685,7 +685,7 @@ function buildMap() {
                 x: j * mapBoundary.width,
                 y: i * mapBoundary.height,
               },
-              image: createImage("./assets/pipeCross.png"),
+              image: createImage("../assets/pipeCross.png"),
             })
           );
           break;
@@ -697,7 +697,7 @@ function buildMap() {
                 y: i * mapBoundary.height,
               },
               color: "blue",
-              image: createImage("./assets/pipeConnectorTop.png"),
+              image: createImage("../assets/pipeConnectorTop.png"),
             })
           );
           break;
@@ -709,7 +709,7 @@ function buildMap() {
                 y: i * mapBoundary.height,
               },
               color: "blue",
-              image: createImage("./assets/pipeConnectorRight.png"),
+              image: createImage("../assets/pipeConnectorRight.png"),
             })
           );
           break;
@@ -721,7 +721,7 @@ function buildMap() {
                 y: i * mapBoundary.height,
               },
               color: "blue",
-              image: createImage("./assets/pipeConnectorBottom.png"),
+              image: createImage("../assets/pipeConnectorBottom.png"),
             })
           );
           break;
@@ -732,7 +732,7 @@ function buildMap() {
                 x: j * mapBoundary.width,
                 y: i * mapBoundary.height,
               },
-              image: createImage("./assets/pipeConnectorLeft.png"),
+              image: createImage("../assets/pipeConnectorLeft.png"),
             })
           );
           break;
